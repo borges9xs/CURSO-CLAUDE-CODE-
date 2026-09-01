@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Atendimento e Marketing Internacional</title>
+<style>
+  :root{
+    --bg:#0e1013;
+    --surface:#181b21;
+    --surface-2:#20242c;
+    --border:#2a2f39;
+    --text:#e7e9ec;
+    --dim:#9aa1ac;
+    --accent:#6ba7ff;
+    --accent-ink:#08192e;
+    --ok:#46c088;
+    --ok-bg:rgba(70,192,136,.12);
+    --bad:#ec5f6a;
+    --bad-bg:rgba(236,95,106,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:40px 20px 64px;
+  }
+  .app{width:100%;max-width:560px}
+
+  header{margin-bottom:22px}
+  h1{
+    font-size:1.15rem;
+    font-weight:600;
+    margin:0 0 14px;
+    letter-spacing:.01em;
+  }
+  .meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:.85rem;
+    color:var(--dim);
+  }
+  .dots{display:flex;gap:6px}
+  .dot{
+    width:22px;height:4px;border-radius:2px;
+    background:var(--border);
+    transition:background .2s;
+  }
+  .dot.done{background:var(--accent)}
+  .dot.current{background:var(--text)}
+  .score b{color:var(--text)}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:24px 22px;
+    margin-top:16px;
+  }
+  .qcount{
+    font-size:.75rem;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:var(--accent);
+    font-weight:600;
+  }
+  .qtext{
+    font-size:1.12rem;
+    font-weight:600;
+    margin:8px 0 18px;
+    line-height:1.4;
+  }
+
+  .opt{
+    display:flex;
+    gap:12px;
+    width:100%;
+    text-align:left;
+    background:var(--surface-2);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:13px 15px;
+    margin:9px 0;
+    font:inherit;
+    font-size:.98rem;
+    line-height:1.4;
+    cursor:pointer;
+    transition:border-color .12s,background .12s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--accent)}
+  .opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .opt:disabled{cursor:default}
+  .opt .key{
+    flex:none;
+    font-weight:700;
+    color:var(--dim);
+    font-size:.9rem;
+    padding-top:1px;
+  }
+  .opt .mark{margin-left:auto;flex:none;font-weight:700}
+  .opt.correct{background:var(--ok-bg);border-color:var(--ok)}
+  .opt.correct .key,.opt.correct .mark{color:var(--ok)}
+  .opt.wrong{background:var(--bad-bg);border-color:var(--bad)}
+  .opt.wrong .key,.opt.wrong .mark{color:var(--bad)}
+
+  .explain{
+    margin-top:14px;
+    border-radius:10px;
+    padding:13px 15px;
+    font-size:.92rem;
+    display:none;
+  }
+  .explain.show{display:block}
+  .explain.ok{background:var(--ok-bg);border:1px solid var(--ok)}
+  .explain.no{background:var(--bad-bg);border:1px solid var(--bad)}
+  .explain .verdict{font-weight:700;display:block;margin-bottom:3px}
+  .explain.ok .verdict{color:var(--ok)}
+  .explain.no .verdict{color:var(--bad)}
+
+  .actions{
+    margin-top:18px;
+    display:flex;
+    justify-content:flex-end;
+  }
+  .btn{
+    background:var(--accent);
+    color:var(--accent-ink);
+    border:none;
+    border-radius:9px;
+    padding:11px 22px;
+    font:inherit;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .btn:hover{filter:brightness(1.07)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.ghost{
+    background:transparent;
+    color:var(--accent);
+    border:1px solid var(--border);
+  }
+
+  /* resultado final */
+  .result{text-align:center;padding:34px 22px}
+  .result .pct{
+    font-size:3.4rem;
+    font-weight:700;
+    line-height:1;
+    letter-spacing:-.02em;
+  }
+  .result .frac{color:var(--dim);margin-top:6px;font-size:.95rem}
+  .result .msg{margin:16px auto 22px;max-width:36ch;color:var(--text)}
+  .result .actions{justify-content:center}
+
+  .foot{margin-top:22px;font-size:.78rem;color:var(--dim);text-align:center}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <h1>Quiz — Atendimento &amp; Marketing Internacional</h1>
+    <div class="meta">
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="score">Acertos: <b id="hits">0</b></div>
+    </div>
+  </header>
+
+  <div id="stage"></div>
+
+  <p class="foot">Baseado no <em>Caderno Unificado — Atendimento/Briefing + Marketing Internacional</em>.</p>
+</main>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "Segundo o caderno, quem é o primeiro cliente da empresa?",
+    options: [
+      "O anunciante, que paga e aprova a campanha",
+      "O funcionário",
+      "O veículo de mídia",
+      "O consumidor final"
+    ],
+    correct: 1,
+    explain: "\"O primeiro cliente da empresa é sempre o funcionário.\" É a ideia de abertura da Aula 1 — a lógica do atendimento começa para dentro da agência antes de chegar ao anunciante."
+  },
+  {
+    q: "Quais são as \"5 casinhas\" usadas para entender uma marca no briefing?",
+    options: [
+      "Produto, Preço, Praça, Promoção e Pessoas",
+      "Produto, Mercado, Target, Campanha e Concorrência",
+      "Anunciante, Agência, Veículo, Fornecedor e Consumidor",
+      "Missão, Visão, Valores, Verba e Vendas"
+    ],
+    correct: 1,
+    explain: "As 5 casinhas são Produto, Mercado, Target, Campanha e Concorrência. A primeira opção é o composto de marketing (4 Ps) e a terceira é o ecossistema publicitário — nenhum dos dois é a resposta."
+  },
+  {
+    q: "Qual a diferença entre share of market e share of voice?",
+    options: [
+      "Share of market é a fatia da marca em vendas; share of voice é a fatia de presença publicitária dentro da categoria",
+      "Share of market mede o número de lojas; share of voice mede o número de anúncios",
+      "Share of market é offline; share of voice é digital",
+      "São sinônimos, usados em contextos diferentes"
+    ],
+    correct: 0,
+    explain: "Share of market = fatia de mercado da marca em vendas. Share of voice = fatia de presença publicitária da marca dentro da categoria. É vocabulário que costuma cair junto com a casinha Mercado."
+  },
+  {
+    q: "Sobre o Plano Marshall, qual afirmação está correta?",
+    options: [
+      "Foi destinado apenas aos países que perderam a guerra",
+      "Foi conduzido pela União Soviética para o Leste Europeu",
+      "Reconstruiu a Europa Ocidental, incluindo vencedores como Reino Unido e França; o Japão teve um programa próprio (Plano Dodge, 1949)",
+      "Financiou a reconstrução do Japão e da China"
+    ],
+    correct: 2,
+    explain: "Ajuste que a prova costuma cobrar: o Plano Marshall (1948) foi para a Europa Ocidental, inclusive países vencedores. O Japão foi reconstruído por um programa separado, sob ocupação americana — o Plano Dodge (1949)."
+  },
+  {
+    q: "No estudo de caso Apple e China, o que significa dizer que \"essa força virou fraqueza\"?",
+    options: [
+      "A China perdeu capacidade de manufatura e a Apple teve de sair do país",
+      "A dependência profunda da cadeia chinesa — escala, fornecedores treinados, engenharia de processo — tornou-se um risco difícil e caro de desmontar",
+      "A Apple nunca dependeu da China, então as tarifas não a afetam",
+      "A força da marca Apple passou a afastar os consumidores chineses"
+    ],
+    correct: 1,
+    explain: "A Apple construiu na China uma cadeia de altíssima precisão (150 dos 187 principais fornecedores com fábrica lá). Essa vantagem virou vulnerabilidade: com tarifas e tensão geopolítica, trocá-la é lento e custoso — \"não há saída fácil\", mesmo com a estratégia China+1 (Vietnã, Índia)."
+  }
+];
+
+const LETTERS = ["A","B","C","D"];
+const stage = document.getElementById('dots');
+const hitsEl = document.getElementById('hits');
+const stageEl = document.getElementById('stage');
+
+let index = 0;
+let hits = 0;
+let answeredCurrent = false;
+
+// monta os indicadores de progresso
+QUESTIONS.forEach(() => {
+  const d = document.createElement('span');
+  d.className = 'dot';
+  stage.appendChild(d);
+});
+
+function paintDots(){
+  [...stage.children].forEach((d, i) => {
+    d.className = 'dot' + (i < index ? ' done' : i === index ? ' current' : '');
+  });
+}
+
+function renderQuestion(){
+  answeredCurrent = false;
+  paintDots();
+  const item = QUESTIONS[index];
+
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const count = document.createElement('div');
+  count.className = 'qcount';
+  count.textContent = 'Questão ' + (index + 1) + ' de ' + QUESTIONS.length;
+  card.appendChild(count);
+
+  const qtext = document.createElement('div');
+  qtext.className = 'qtext';
+  qtext.textContent = item.q;
+  card.appendChild(qtext);
+
+  const opts = document.createElement('div');
+  item.options.forEach((text, oi) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'opt';
+    const key = document.createElement('span');
+    key.className = 'key';
+    key.textContent = LETTERS[oi];
+    const label = document.createElement('span');
+    label.textContent = text;
+    b.append(key, label);
+    b.addEventListener('click', () => choose(oi, opts, item, b));
+    opts.appendChild(b);
+  });
+  card.appendChild(opts);
+
+  const explain = document.createElement('div');
+  explain.className = 'explain';
+  explain.id = 'explain';
+  card.appendChild(explain);
+
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+  const next = document.createElement('button');
+  next.className = 'btn';
+  next.id = 'next';
+  next.disabled = true;
+  next.textContent = index === QUESTIONS.length - 1 ? 'Ver resultado' : 'Avançar';
+  next.addEventListener('click', advance);
+  actions.appendChild(next);
+  card.appendChild(actions);
+
+  stageEl.replaceChildren(card);
+}
+
+function choose(chosen, optsWrap, item, btn){
+  if (answeredCurrent) return;
+  answeredCurrent = true;
+
+  const buttons = [...optsWrap.children];
+  buttons.forEach(b => b.disabled = true);
+
+  const isRight = chosen === item.correct;
+  if (isRight) { hits++; hitsEl.textContent = hits; }
+
+  buttons[item.correct].classList.add('correct');
+  buttons[item.correct].insertAdjacentHTML('beforeend', '<span class="mark">✓</span>');
+  if (!isRight){
+    btn.classList.add('wrong');
+    btn.insertAdjacentHTML('beforeend', '<span class="mark">✕</span>');
+  }
+
+  const explain = document.getElementById('explain');
+  explain.className = 'explain show ' + (isRight ? 'ok' : 'no');
+  const v = document.createElement('span');
+  v.className = 'verdict';
+  v.textContent = isRight ? 'Você acertou!' : 'Resposta incorreta.';
+  explain.append(v, document.createTextNode(item.explain));
+
+  document.getElementById('next').disabled = false;
+}
+
+function advance(){
+  if (index < QUESTIONS.length - 1){
+    index++;
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    renderResult();
+  }
+}
+
+function renderResult(){
+  index = QUESTIONS.length;
+  paintDots();
+
+  const pct = Math.round(hits / QUESTIONS.length * 100);
+  let msg;
+  if (pct === 100) msg = "Gabaritou. Conteúdo do caderno na ponta da língua.";
+  else if (pct >= 80) msg = "Muito bom — só revise o ponto que escapou.";
+  else if (pct >= 60) msg = "No caminho. Vale reler os temas que você errou.";
+  else if (pct >= 40) msg = "Deu para pegar o essencial, mas precisa de mais uma passada no caderno.";
+  else msg = "Hora de voltar ao caderno com calma antes de tentar de novo.";
+
+  const card = document.createElement('div');
+  card.className = 'card result';
+  card.innerHTML =
+    '<div class="pct">' + pct + '%</div>' +
+    '<div class="frac">' + hits + ' de ' + QUESTIONS.length + ' questões corretas</div>' +
+    '<p class="msg">' + msg + '</p>' +
+    '<div class="actions"><button type="button" class="btn ghost" id="restart">Refazer o quiz</button></div>';
+
+  stageEl.replaceChildren(card);
+  document.getElementById('restart').addEventListener('click', restart);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart(){
+  index = 0;
+  hits = 0;
+  hitsEl.textContent = '0';
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
