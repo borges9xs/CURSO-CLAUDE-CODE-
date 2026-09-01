@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revisão — Atendimento e Marketing Internacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  img{max-width:100%}
+  [hidden]{display:none!important}
+  :root{
+    --bg:#f6f4ee;
+    --surface:#ffffff;
+    --surface-2:#f0ece1;
+    --border:#ddd7c6;
+    --text:#23262e;
+    --text-dim:#5f6470;
+    --accent:#9c5f16;
+    --accent-line:#b1701f;
+    --blue:#2f68c4;
+    --blue-bg:rgba(47,104,196,.09);
+    --ok:#1f7a4d;
+    --ok-bg:rgba(31,122,77,.10);
+    --bad:#c23b43;
+    --bad-bg:rgba(194,59,67,.08);
+    --shadow:0 1px 2px rgba(35,38,46,.06),0 8px 24px -12px rgba(35,38,46,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12141c;
+      --surface:#1a1d27;
+      --surface-2:#232734;
+      --border:#333849;
+      --text:#e8e9ee;
+      --text-dim:#9aa0b0;
+      --accent:#e0a355;
+      --accent-line:#e0a355;
+      --blue:#7cb0ff;
+      --blue-bg:rgba(124,176,255,.11);
+      --ok:#4cba85;
+      --ok-bg:rgba(76,186,133,.13);
+      --bad:#e5636b;
+      --bad-bg:rgba(229,99,107,.12);
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12141c;
+    --surface:#1a1d27;
+    --surface-2:#232734;
+    --border:#333849;
+    --text:#e8e9ee;
+    --text-dim:#9aa0b0;
+    --accent:#e0a355;
+    --accent-line:#e0a355;
+    --blue:#7cb0ff;
+    --blue-bg:rgba(124,176,255,.11);
+    --ok:#4cba85;
+    --ok-bg:rgba(76,186,133,.13);
+    --bad:#e5636b;
+    --bad-bg:rgba(229,99,107,.12);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    line-height:1.62;
+    font-size:16.5px;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 22px 120px}
+
+  /* ---------- header ---------- */
+  header.page{padding:60px 0 30px}
+  .kicker{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent);
+    display:flex;align-items:center;gap:10px;margin-bottom:20px;
+  }
+  .kicker::after{content:"";flex:1;height:1px;background:var(--border)}
+  header.page h1{
+    font-family:"Fraunces","Iowan Old Style",Georgia,serif;
+    font-weight:500;
+    font-size:clamp(2rem,6vw,2.8rem);
+    line-height:1.12;
+    letter-spacing:-.01em;
+    text-wrap:balance;
+    margin:0 0 16px;
+  }
+  header.page .lead{color:var(--text-dim);font-size:1.02rem;margin:0;max-width:60ch}
+
+  /* ---------- table of contents ---------- */
+  .toc{
+    margin:36px 0 10px;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    padding:22px 0;
+  }
+  .toc h2{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--text-dim);margin:0 0 14px;
+  }
+  .toc ol{
+    margin:0;padding:0;list-style:none;
+    counter-reset:toc;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:6px 28px;
+  }
+  .toc li{counter-increment:toc;font-size:.92rem}
+  .toc li::before{
+    content:counter(toc,decimal-leading-zero);
+    font-family:"IBM Plex Mono",monospace;font-size:.78rem;
+    color:var(--accent);margin-right:10px;
+  }
+  .toc a{color:var(--text);text-decoration:none;border-bottom:1px solid transparent}
+  .toc a:hover{border-bottom-color:var(--accent-line)}
+
+  /* ---------- parte divider ---------- */
+  .parte{
+    margin:64px 0 8px;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--text-dim);
+  }
+  .parte b{color:var(--text);font-weight:500}
+
+  /* ---------- theme section ---------- */
+  section.tema{margin-top:40px;scroll-margin-top:20px}
+  section.tema > h2{
+    font-family:"Fraunces",Georgia,serif;
+    font-weight:500;font-size:1.5rem;line-height:1.25;
+    letter-spacing:-.005em;text-wrap:balance;
+    margin:0 0 4px;
+    display:flex;gap:12px;align-items:baseline;
+  }
+  section.tema > h2 .n{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.9rem;color:var(--accent);font-weight:400;
+    flex:none;
+  }
+  .sub{color:var(--text-dim);margin:2px 0 0 34px;
+    font-family:"IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;font-size:.68rem}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px 22px;
+    margin:16px 0;
+    box-shadow:var(--shadow);
+  }
+  .card h3{
+    font-family:"Fraunces",Georgia,serif;font-weight:500;
+    font-size:1.05rem;margin:14px 0 8px;
+  }
+  .card h3:first-child{margin-top:0}
+  .card ul{margin:6px 0 0;padding-left:20px}
+  .card li{margin:7px 0}
+  .card li::marker{color:var(--accent-line)}
+  .card p{margin:8px 0}
+  .key{font-weight:600;color:var(--text)}
+  .muted{color:var(--text-dim)}
+  em{font-style:italic}
+
+  table{width:100%;border-collapse:collapse;margin:10px 0 2px;font-size:.92rem;display:block;overflow-x:auto}
+  @media(min-width:560px){table{display:table}}
+  th,td{border:1px solid var(--border);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--surface-2);font-weight:600;font-size:.82rem;letter-spacing:.02em}
+  td:first-child{font-weight:600;white-space:nowrap}
+
+  .note{
+    border-left:2px solid var(--blue);
+    background:var(--blue-bg);
+    border-radius:0 8px 8px 0;
+    padding:11px 15px;
+    margin:14px 0 2px;
+    font-size:.9rem;
+    color:var(--text-dim);
+  }
+  .note strong{color:var(--text)}
+  .note.warn{border-left-color:var(--bad);background:var(--bad-bg)}
+
+  /* ---------- quiz ---------- */
+  #quiz{margin-top:80px;padding-top:8px}
+  #quiz .parte{margin-top:0}
+  #quiz > h2{
+    font-family:"Fraunces",Georgia,serif;font-weight:500;
+    font-size:1.9rem;margin:6px 0 6px;letter-spacing:-.01em;
+  }
+  #quiz > p.intro{color:var(--text-dim);margin:0 0 8px;font-size:.98rem}
+
+  .progress{
+    position:sticky;top:0;z-index:10;
+    background:color-mix(in srgb,var(--bg) 92%,transparent);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+    padding:12px 0;margin:18px 0 8px;
+    font-family:"IBM Plex Mono",monospace;font-size:.8rem;
+    color:var(--text-dim);
+    display:flex;gap:20px;
+  }
+  .progress b{color:var(--text);font-weight:500}
+  .progress .track{flex:1;align-self:center;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+  .progress .track i{display:block;height:100%;width:0;background:var(--accent-line);transition:width .3s ease}
+
+  .q{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px 22px;
+    margin:16px 0;
+    box-shadow:var(--shadow);
+  }
+  .q .qnum{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent);
+  }
+  .q .qtext{font-weight:600;margin:6px 0 14px;font-size:1.04rem;line-height:1.45;text-wrap:pretty}
+  .opt{
+    display:flex;width:100%;gap:12px;text-align:left;
+    background:var(--surface-2);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:11px 14px;margin:8px 0;
+    font:inherit;font-size:.95rem;line-height:1.4;
+    cursor:pointer;
+    transition:border-color .12s,background .12s,transform .06s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--accent-line)}
+  .opt:active:not(:disabled){transform:translateY(1px)}
+  .opt:focus-visible{outline:2px solid var(--accent-line);outline-offset:2px}
+  .opt:disabled{cursor:default}
+  .opt .letter{
+    font-family:"IBM Plex Mono",monospace;font-size:.8rem;
+    color:var(--text-dim);flex:none;padding-top:1px;
+  }
+  .opt.correct{background:var(--ok-bg);border-color:var(--ok)}
+  .opt.correct .letter{color:var(--ok)}
+  .opt.wrong{background:var(--bad-bg);border-color:var(--bad)}
+  .opt.wrong .letter{color:var(--bad)}
+  .opt .mark{margin-left:auto;font-weight:700;flex:none}
+  .opt.correct .mark{color:var(--ok)}
+  .opt.wrong .mark{color:var(--bad)}
+
+  .explain{
+    margin-top:12px;padding:12px 15px;border-radius:8px;
+    font-size:.9rem;line-height:1.55;display:none;
+  }
+  .explain.show{display:block}
+  .explain.ok{background:var(--ok-bg);border:1px solid var(--ok)}
+  .explain.no{background:var(--bad-bg);border:1px solid var(--bad)}
+  .explain b{color:var(--text)}
+
+  .final{
+    display:none;margin:26px 0 0;text-align:center;
+    background:var(--surface);border:1px solid var(--accent-line);
+    border-radius:12px;padding:26px 24px;box-shadow:var(--shadow);
+  }
+  .final.show{display:block}
+  .final .big{
+    font-family:"Fraunces",Georgia,serif;font-size:2.6rem;font-weight:500;
+    font-variant-numeric:tabular-nums;
+  }
+  .final p{color:var(--text-dim);margin:6px 0 16px}
+  .final button{
+    background:var(--accent-line);color:#fff;border:none;border-radius:8px;
+    padding:10px 22px;font:inherit;font-weight:600;cursor:pointer;
+  }
+  .final button:hover{filter:brightness(1.06)}
+
+  footer{
+    margin-top:70px;padding-top:22px;border-top:1px solid var(--border);
+    color:var(--text-dim);font-size:.8rem;line-height:1.6;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important}
+    html{scroll-behavior:auto}
+  }
+  html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="page">
+  <div class="kicker">Caderno de revisão · 26 ago 2026</div>
+  <h1>Papel estratégico do atendimento &amp; marketing internacional</h1>
+  <p class="lead">Os conceitos do <em>Caderno Unificado</em> reorganizados por tema, com um quiz de 15 questões que corrige e explica cada resposta na hora. Anotações de PDCP (atendimento/briefing) e de Marketing Internacional — mercados globais.</p>
+</header>
+
+<nav class="toc">
+  <h2>Índice</h2>
+  <ol>
+    <li><a href="#t1">O atendimento dentro da agência</a></li>
+    <li><a href="#t2">Funções do profissional de atendimento</a></li>
+    <li><a href="#t3">O ecossistema publicitário</a></li>
+    <li><a href="#t4">O que é um briefing</a></li>
+    <li><a href="#t5">As 5 casinhas</a></li>
+    <li><a href="#t6">Análise de briefing e público</a></li>
+    <li><a href="#t7">Vocabulário de mercado</a></li>
+    <li><a href="#t8">A primeira globalização (1800–1945)</a></li>
+    <li><a href="#t9">A ordem do pós-guerra (1945–1990)</a></li>
+    <li><a href="#t10">Fim do ciclo e cadeias globais</a></li>
+    <li><a href="#t11">Padronização × adaptação</a></li>
+    <li><a href="#t12">Estudo de caso: Apple e China</a></li>
+    <li><a href="#t13">Introdução ao marketing internacional</a></li>
+    <li><a href="#quiz">Quiz — 15 questões</a></li>
+  </ol>
+</nav>
+
+<div class="parte">Parte 1 — <b>Papel estratégico do atendimento e briefing</b></div>
+
+<section class="tema" id="t1">
+  <h2><span class="n">01</span> O atendimento dentro da agência</h2>
+  <div class="sub">Aula 1</div>
+  <div class="card">
+    <ul>
+      <li><span class="key">O primeiro cliente da empresa é sempre o funcionário.</span></li>
+      <li>O <span class="key">atendimento é o elo entre a agência e o anunciante</span>. É um <span class="key">profissional de negócios</span> — trabalho pautado em liderança, tomada de decisão e visão técnica de mercado —, <span class="muted">não um "leva e traz".</span></li>
+      <li>Ele é, ao mesmo tempo, <span class="key">o cliente dentro da agência e a agência dentro do cliente</span>. Precisa ser bom vendedor de produtos <em>e</em> de ideias, com soft skills fortes.</li>
+      <li>A agência tem vários departamentos que levam a publicidade ao público-alvo: atendimento, planejamento, criação, produção, projetos, mídia, social etc.</li>
+    </ul>
+    <div class="note"><strong>Não confundir as áreas:</strong> atendimento = relacionamento e negócio; planejamento = estratégia e raciocínio de comunicação; mídia = onde, quando e com que verba veicular.</div>
+  </div>
+</section>
+
+<section class="tema" id="t2">
+  <h2><span class="n">02</span> Funções do profissional de atendimento</h2>
+  <div class="sub">Aula 1</div>
+  <div class="card">
+    <ul>
+      <li>Ser o <span class="key">principal contato do anunciante</span> dentro da agência.</li>
+      <li><span class="key">Levantar o briefing</span> da campanha junto ao anunciante.</li>
+      <li><span class="key">Redigir o briefing</span> e distribuir o material para os times internos.</li>
+      <li>Pensar caminhos para a campanha <span class="key">junto com o planejamento</span>.</li>
+      <li><span class="key">Convocar as equipes internas</span> para reuniões e alinhamentos de processo e entrega.</li>
+    </ul>
+    <div class="note"><strong>Soft skills mais cobradas:</strong> escuta ativa, escrita clara (o briefing é um texto), negociação e gestão de expectativa, organização de prazo e fluxo, leitura de contexto do cliente e capacidade de dar más notícias cedo. <strong>Erro clássico do júnior:</strong> prometer prazo sem consultar a produção.</div>
+  </div>
+</section>
+
+<section class="tema" id="t3">
+  <h2><span class="n">03</span> O ecossistema publicitário — quem é quem</h2>
+  <div class="card">
+    <table>
+      <tr><th>Ator</th><th>Papel</th></tr>
+      <tr><td>Anunciante</td><td>A marca — quem paga e aprova.</td></tr>
+      <tr><td>Agência</td><td>Quem cria e planeja a comunicação.</td></tr>
+      <tr><td>Veículo</td><td>Quem tem o espaço de mídia: TV, portal, rede social, OOH.</td></tr>
+      <tr><td>Fornecedor</td><td>Produtora, gráfica, estúdio, ferramenta. Trabalham para anunciantes, agências e veículos.</td></tr>
+    </table>
+    <p class="muted">O atendimento circula entre os quatro.</p>
+  </div>
+</section>
+
+<section class="tema" id="t4">
+  <h2><span class="n">04</span> O que é um briefing</h2>
+  <div class="sub">Aula 2</div>
+  <div class="card">
+    <p>Documento que reúne o <span class="key">conjunto de informações necessárias para o start da campanha</span> dentro da agência.</p>
+    <p>Traz informações sobre <span class="key">produto, concorrência, target e mercado de atuação</span>, somadas às <span class="key">expectativas de campanha</span>, para que os departamentos envolvidos façam um bom trabalho em prol dos objetivos determinados pela marca anunciante.</p>
+    <div class="note"><strong>Briefing bom × ruim:</strong> um bom briefing tem objetivo <em>mensurável</em> (não "aumentar a visibilidade", mas o que precisa mudar e em quanto tempo), problema de comunicação bem definido, restrições ditas na hora certa (mandatórios de marca, exigências legais, o que não pode ser dito), prazo e verba reais e critério de aprovação claro. Briefing incompleto vira retrabalho — por isso o atendimento precisa saber perguntar.</div>
+  </div>
+</section>
+
+<section class="tema" id="t5">
+  <h2><span class="n">05</span> As "5 casinhas" para entender uma marca</h2>
+  <div class="sub">Aula 2</div>
+  <div class="card">
+    <table>
+      <tr><th>Casinha</th><th>O que levantar</th></tr>
+      <tr><td>Produto</td><td>Uso, anunciante, benefícios, preço recomendado, diferenciais, o que deve e o que não deve ser dito.</td></tr>
+      <tr><td>Mercado</td><td>Mercado atual, sazonalidade, principais mercados, tendências, <em>share of market</em>, distribuição.</td></tr>
+      <tr><td>Target</td><td>Comprador, consumidor, decisor, influenciador; perfil demográfico, geográfico e comportamental.</td></tr>
+      <tr><td>Campanha</td><td>Budget, distribuição do budget, período da campanha, pacotes de mídia, objetivos.</td></tr>
+      <tr><td>Concorrência</td><td>Concorrentes diretos e indiretos.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="tema" id="t6">
+  <h2><span class="n">06</span> Análise de briefing e público</h2>
+  <div class="card">
+    <ul>
+      <li>A análise começa com uma pergunta: <span class="key">"com qual público eu quero me comunicar?"</span></li>
+      <li>A comunicação precisa ser feita <span class="key">para quem é diferente de você</span>. Fugir do que é igual a você e dos seus próprios gostos — senão você fala só com o seu espelho.</li>
+      <li><span class="key">Budget</span> = a verba destinada à campanha. Tende a englobar tanto a compra dos espaços publicitários (offline ou digital) quanto os custos previstos de produção das peças.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="tema" id="t7">
+  <h2><span class="n">07</span> Vocabulário de mercado que cai junto</h2>
+  <div class="card">
+    <ul>
+      <li><span class="key">Share of market</span> = fatia de mercado da marca <em>em vendas</em>.</li>
+      <li><span class="key">Share of voice</span> = fatia de <em>presença publicitária</em> da marca dentro da categoria.</li>
+      <li><span class="key">Comprador × consumidor × decisor × influenciador</span> = quem paga, quem usa, quem bate o martelo e quem opina. Na ração de cachorro, o consumidor (o cão) não é o comprador — e isso muda a peça.</li>
+      <li><span class="key">Concorrente direto</span> disputa a mesma necessidade com produto parecido. <span class="key">Concorrente indireto</span> disputa o mesmo dinheiro ou o mesmo tempo.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="parte">Parte 2 — <b>Global markets and trades of international marketing</b></div>
+
+<section class="tema" id="t8">
+  <h2><span class="n">08</span> A primeira globalização (1800–1945)</h2>
+  <div class="card">
+    <h3>1800–1914 — Industrialização e a primeira globalização</h3>
+    <ul>
+      <li><span class="key">Industrialização:</span> navios a vapor, ferrovias e telégrafo tornaram o comércio mais barato, rápido e amplo.</li>
+      <li>Ascensão das <span class="key">trading companies multinacionais</span> — da Companhia das Índias Orientais às firmas modernas.</li>
+      <li><span class="key">Cultura de consumo:</span> surgem os bens de marca (sabão, bebidas, têxteis).</li>
+      <li>Mercados coloniais e desigualdade global no comércio.</li>
+    </ul>
+    <h3>1914–1945 — Os mercados globais durante as guerras</h3>
+    <ul>
+      <li>Choques globais moldam <span class="key">acesso do consumidor, confiança e resiliência</span>.</li>
+      <li>Expansão do <span class="key">mercado ilegal</span> como resposta às restrições.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="tema" id="t9">
+  <h2><span class="n">09</span> A ordem global do pós-guerra (1945–1990)</h2>
+  <div class="card">
+    <ul>
+      <li><span class="key">Instituições de Bretton Woods:</span> FMI, Banco Mundial e GATT (que depois vira OMC).</li>
+      <li>Nova ordem econômica; os <span class="key">EUA emergem como principal potência</span> econômica e política do pós-guerra.</li>
+      <li>O <span class="key">dólar vira a moeda de reserva mundial</span>, com paridade em ouro.</li>
+      <li><span class="key">Plano Marshall:</span> reconstrução da Europa Ocidental e apoio à recuperação econômica.</li>
+      <li>Da TV a cabo à <span class="key">MTV</span>: nova cultura publicitária, uma nova ordem de fazer publicidade.</li>
+    </ul>
+    <div class="note warn"><strong>Ajuste que costuma cair na prova:</strong> o Plano Marshall (1948) foi para a <strong>Europa Ocidental</strong>, incluindo países <em>vencedores</em> como Reino Unido e França — não só para quem perdeu a guerra. O <strong>Japão</strong> foi reconstruído por um programa separado, sob ocupação americana: o <strong>Plano Dodge (1949)</strong>.</div>
+  </div>
+</section>
+
+<section class="tema" id="t10">
+  <h2><span class="n">10</span> O que fechou o ciclo e criou as cadeias globais</h2>
+  <div class="card">
+    <ul>
+      <li><span class="key">1971:</span> Bretton Woods acaba quando Nixon suspende a conversibilidade do dólar em ouro — o mundo passa a <span class="key">câmbio flutuante</span>.</li>
+      <li><span class="key">Containerização</span> (anos 1960 em diante): despencou o custo de frete e viabilizou a produção espalhada pelo mundo.</li>
+      <li><span class="key">Queda do Muro (1989):</span> entrada da China e do Leste Europeu no comércio global.</li>
+      <li>Criação da <span class="key">OMC em 1995</span>; entrada da <span class="key">China na OMC em 2001</span>.</li>
+      <li>Nascem as <span class="key">cadeias globais de valor</span> — produto pensado num país, feito em outro, vendido no mundo todo.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="tema" id="t11">
+  <h2><span class="n">11</span> A virada MTV e o debate padronização × adaptação</h2>
+  <div class="card">
+    <ul>
+      <li>Cabo e satélite <span class="key">fragmentaram a audiência</span> e permitiram segmentar por <span class="key">estilo de vida</span> em vez de só por região.</li>
+      <li>É o contexto do artigo de <span class="key">Theodore Levitt, "The Globalization of Markets" (1983)</span>, que defendia <span class="key">marcas padronizadas para o mundo todo</span>.</li>
+      <li>Origem do debate <span class="key">padronização</span> (economia de escala, marca coerente) <span class="key">× adaptação</span> (produto, preço, comunicação e distribuição ajustados ao país).</li>
+      <li>Resposta usual: <span class="key">"glocal"</span> — posicionamento global, execução local.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="tema" id="t12">
+  <h2><span class="n">12</span> Estudo de caso — Apple e China (BBC)</h2>
+  <div class="card">
+    <ul>
+      <li>Os iPhones dizem <em>"designed in California"</em>, mas <span class="key">cerca de 9 em cada 10 são feitos na China</span> — país mais atingido pelas tarifas de Trump (chegaram a 245% em alguns itens; smartphones tiveram isenção de última hora).</li>
+      <li>A relação vem do <span class="key">fim dos anos 1990</span>: uma Apple quase falida encontrou fôlego numa China que se abria à manufatura estrangeira. A Apple não só usou fornecedores locais — <span class="key">treinou esses fornecedores</span>, transformando firmas pequenas em fabricantes de precisão. Hoje 150 dos 187 principais fornecedores têm fábrica na China.</li>
+      <li><span class="key">Argumento central: essa força virou fraqueza.</span> Washington acredita que tarifas trarão a produção de volta; especialistas chamam isso de fantasia. A Apple fala em diversificar desde 2013 e só agiu de verdade após a pandemia (Vietnã e Índia — que também têm tarifas altas). Não há saída fácil.</li>
+      <li><span class="key">Pressão dos dois lados:</span> retaliação chinesa (tarifas de 125%, controle de terras raras), perda da liderança de smartphones na China para Huawei e Vivo, demanda local fraca, ChatGPT banido, limites a Bluetooth e AirDrop.</li>
+    </ul>
+    <div class="note"><strong>O que o caso ilustra na matéria:</strong> dependência de cadeia de suprimentos e o custo de trocá-la (a China oferece escala, fornecedores treinados e engenharia de processo, não só mão de obra barata); <strong>risco geopolítico como variável de marketing</strong>, não só de logística; a estratégia <strong>China+1</strong> (Vietnã, Índia, México); e as <strong>barreiras não tarifárias</strong> — banir app, limitar recurso do aparelho, controlar exportação de insumo — tão decisivas quanto a alíquota.</div>
+  </div>
+</section>
+
+<section class="tema" id="t13">
+  <h2><span class="n">13</span> Introdução ao marketing internacional</h2>
+  <div class="card">
+    <p>Só dá para falar de marketing internacional entendendo o mercado. O interesse pela área se explica por dois movimentos:</p>
+    <ul>
+      <li><span class="key">Mudança constante nas estruturas de competição</span> — concorrente novo pode surgir de qualquer lugar do mundo.</li>
+      <li><span class="key">Mudança nas características de demanda</span> nos mercados ao redor do mundo.</li>
+    </ul>
+    <p>Duas perguntas organizam a disciplina:</p>
+    <ul>
+      <li><span class="key">1) Entrar ou não, e onde?</span> Avalia-se atratividade do mercado, distância cultural, regulatória e logística.</li>
+      <li><span class="key">2) Como entrar?</span> Em ordem crescente de investimento e de controle:
+        <br>exportação (direta ou indireta) → licenciamento → franquia → joint venture → subsidiária própria / investimento direto (FDI).
+        <br><span class="muted">Quanto mais controle, mais risco e capital travado.</span></li>
+    </ul>
+    <div class="note">Dentro de cada escolha volta o dilema <strong>padronizar × adaptar</strong>. A resposta normalmente é <strong>"glocal"</strong>: posicionamento global, execução local.</div>
+  </div>
+</section>
+
+<section id="quiz">
+  <div class="parte">Teste</div>
+  <h2>Quiz — 15 questões</h2>
+  <p class="intro">Clique numa alternativa para responder. A página mostra na hora se você acertou e explica o porquê. Cada questão vale 1 ponto e só pode ser respondida uma vez.</p>
+
+  <div class="progress">
+    <span>Respondidas <b><span id="answered">0</span>/15</b></span>
+    <span class="track"><i id="bar"></i></span>
+    <span>Acertos <b id="hits">0</b></span>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <div class="final" id="final">
+    <div class="big"><span id="final-score">0</span>/15</div>
+    <p id="final-msg"></p>
+    <button type="button" id="retry">Refazer o quiz</button>
+  </div>
+</section>
+
+<footer>
+  Página de revisão gerada a partir do <em>Caderno Unificado — Atendimento/Briefing + Marketing Internacional</em>.
+  Data da anotação original: 26/08/2026. Os blocos destacados ("Complemento" / "Ajuste") são acréscimos ao material da aula — confira com a professora antes da prova.
+</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "Segundo o caderno, quem é o primeiro cliente da empresa?",
+    options: ["O anunciante que paga a campanha","O funcionário","O veículo de mídia","O consumidor final"],
+    correct: 1,
+    explain: "\"O primeiro cliente da empresa é sempre o funcionário.\" É a primeira ideia da Aula 1 — a lógica do atendimento começa para dentro da agência."
+  },
+  {
+    q: "Qual definição descreve melhor o papel do atendimento?",
+    options: [
+      "Um mensageiro que leva e traz informações entre agência e cliente",
+      "O responsável por criar os layouts e textos das peças",
+      "O elo entre agência e anunciante, atuando como profissional de negócios",
+      "O setor que define sozinho a verba e os pacotes de mídia"
+    ],
+    correct: 2,
+    explain: "O atendimento é o elo entre agência e anunciante, com trabalho pautado em liderança e tomada de decisão — um profissional de negócios, explicitamente \"não um leva e traz\". Criação faz as peças; mídia cuida da verba e da veiculação."
+  },
+  {
+    q: "Qual NÃO é uma função do profissional de atendimento citada no caderno?",
+    options: [
+      "Levantar e redigir o briefing da campanha",
+      "Ser o principal contato do anunciante dentro da agência",
+      "Convocar as equipes internas para reuniões e alinhamentos",
+      "Produzir a arte-final das peças aprovadas"
+    ],
+    correct: 3,
+    explain: "As funções listadas são: principal contato do anunciante, levantar o briefing, redigir e distribuir o briefing, pensar caminhos junto ao planejamento e convocar as equipes. Produzir arte-final é da produção/criação."
+  },
+  {
+    q: "O que é um briefing?",
+    options: [
+      "O relatório de resultados entregue ao cliente no fim da campanha",
+      "O documento que reúne as informações necessárias para o start da campanha dentro da agência",
+      "A apresentação criativa das peças para aprovação do anunciante",
+      "O contrato comercial entre agência e anunciante"
+    ],
+    correct: 1,
+    explain: "Briefing = documento que reúne o conjunto de informações necessárias para o start da campanha dentro da agência, trazendo produto, concorrência, target e mercado, mais as expectativas de campanha."
+  },
+  {
+    q: "Quais são as \"5 casinhas\" para entender uma marca?",
+    options: [
+      "Produto, Preço, Praça, Promoção e Pessoas",
+      "Marca, Missão, Visão, Valores e Verba",
+      "Produto, Mercado, Target, Campanha e Concorrência",
+      "Anunciante, Agência, Veículo, Fornecedor e Consumidor"
+    ],
+    correct: 2,
+    explain: "As 5 casinhas são Produto, Mercado, Target, Campanha e Concorrência. A primeira opção é o composto de marketing (4 Ps); a última é o ecossistema publicitário."
+  },
+  {
+    q: "Sazonalidade, share of market e distribuição são informações levantadas em qual casinha?",
+    options: ["Produto","Campanha","Target","Mercado"],
+    correct: 3,
+    explain: "A casinha Mercado cobre mercado atual, sazonalidade, principais mercados, tendências, share of market e distribuição."
+  },
+  {
+    q: "Com qual pergunta começa a análise de um briefing?",
+    options: [
+      "Qual é a verba disponível para a campanha?",
+      "Com qual público eu quero me comunicar?",
+      "Quais veículos vamos usar?",
+      "Quem são os concorrentes diretos?"
+    ],
+    correct: 1,
+    explain: "A análise começa perguntando \"com qual público eu quero me comunicar?\". E a comunicação deve ser feita para quem é diferente de você — senão você fala só com o seu espelho."
+  },
+  {
+    q: "Qual a diferença entre share of market e share of voice?",
+    options: [
+      "Share of market é a fatia em vendas; share of voice é a fatia de presença publicitária na categoria",
+      "Share of market é o número de lojas; share of voice é o número de anúncios",
+      "São sinônimos usados em contextos diferentes",
+      "Share of market é digital; share of voice é offline"
+    ],
+    correct: 0,
+    explain: "Share of market = fatia de mercado da marca em vendas. Share of voice = fatia de presença publicitária da marca dentro da categoria."
+  },
+  {
+    q: "Um concorrente indireto é aquele que...",
+    options: [
+      "Disputa a mesma necessidade com um produto muito parecido",
+      "Disputa o mesmo dinheiro ou o mesmo tempo do consumidor",
+      "Atua em outro país e não afeta o mercado local",
+      "Vende o mesmo produto por um preço menor"
+    ],
+    correct: 1,
+    explain: "Concorrente direto disputa a mesma necessidade com produto parecido; concorrente indireto disputa o mesmo dinheiro ou o mesmo tempo (ex.: cinema x streaming x restaurante)."
+  },
+  {
+    q: "No exemplo da ração de cachorro, por que comprador e consumidor não são a mesma pessoa?",
+    options: [
+      "Porque o cachorro compra a própria ração",
+      "Porque quem usa o produto (o cão) é diferente de quem paga por ele, e isso muda a peça",
+      "Porque a ração é vendida só para pet shops",
+      "Porque o decisor é sempre o veterinário"
+    ],
+    correct: 1,
+    explain: "Comprador × consumidor × decisor × influenciador = quem paga, quem usa, quem bate o martelo e quem opina. Na ração, o consumidor (o cão) não é o comprador — a comunicação precisa falar com o tutor."
+  },
+  {
+    q: "Quais instituições surgiram de Bretton Woods?",
+    options: [
+      "ONU, OTAN e União Europeia",
+      "FMI, Banco Mundial e GATT (que depois vira OMC)",
+      "OPEP, Mercosul e NAFTA",
+      "OMC, G20 e BRICS"
+    ],
+    correct: 1,
+    explain: "As instituições de Bretton Woods são o FMI, o Banco Mundial e o GATT, que mais tarde se transforma na OMC (criada em 1995)."
+  },
+  {
+    q: "Sobre o Plano Marshall, qual afirmação está correta?",
+    options: [
+      "Foi destinado apenas aos países que perderam a guerra",
+      "Reconstruiu a Europa Ocidental, incluindo vencedores como Reino Unido e França; o Japão teve programa próprio (Plano Dodge, 1949)",
+      "Foi um plano de reconstrução conduzido pela União Soviética",
+      "Financiou a reconstrução do Japão e da China no pós-guerra"
+    ],
+    correct: 1,
+    explain: "Ajuste que costuma cair na prova: o Plano Marshall (1948) foi para a Europa Ocidental, inclusive países vencedores. O Japão foi reconstruído por um programa separado, sob ocupação americana — o Plano Dodge (1949)."
+  },
+  {
+    q: "O que marcou o fim do sistema de Bretton Woods, em 1971?",
+    options: [
+      "A criação da OMC",
+      "A entrada da China no comércio global",
+      "Nixon suspende a conversibilidade do dólar em ouro, e o mundo passa ao câmbio flutuante",
+      "A queda do Muro de Berlim"
+    ],
+    correct: 2,
+    explain: "Em 1971, Nixon suspende a conversibilidade do dólar em ouro; acaba a paridade e o mundo passa a câmbio flutuante. A OMC (1995), a queda do Muro (1989) e a entrada da China vêm depois."
+  },
+  {
+    q: "O artigo de Theodore Levitt, \"The Globalization of Markets\" (1983), defendia...",
+    options: [
+      "Adaptação total de produto e comunicação a cada país",
+      "Marcas padronizadas para o mundo todo",
+      "O fim das trading companies multinacionais",
+      "A volta da produção para o país de origem"
+    ],
+    correct: 1,
+    explain: "Levitt defendia marcas padronizadas globalmente. No contexto da fragmentação de audiência por cabo e satélite (a virada MTV), o artigo dá origem ao debate padronização × adaptação."
+  },
+  {
+    q: "No caso Apple e China, a frase \"essa força virou fraqueza\" significa que...",
+    options: [
+      "A China perdeu capacidade de manufatura e a Apple precisou sair do país",
+      "A profunda dependência da cadeia chinesa (escala, fornecedores treinados, engenharia de processo) tornou-se um risco difícil e caro de desmontar",
+      "A Apple nunca dependeu da China e as tarifas não a afetam",
+      "A força da marca Apple passou a afastar consumidores chineses"
+    ],
+    correct: 1,
+    explain: "A Apple construiu na China uma cadeia de altíssima precisão (150 de 187 fornecedores principais com fábrica lá). Essa vantagem virou vulnerabilidade: com tarifas e tensão geopolítica, trocá-la é lento e custoso — \"não há saída fácil\", mesmo com a estratégia China+1 (Vietnã, Índia)."
+  }
+];
+
+const LETTERS = ["A","B","C","D"];
+const container = document.getElementById('quiz-container');
+const barEl = document.getElementById('bar');
+let answered = 0, hits = 0;
+
+QUESTIONS.forEach((item, qi) => {
+  const qEl = document.createElement('div');
+  qEl.className = 'q';
+  qEl.innerHTML = '<div class="qnum">Questão ' + (qi + 1) + ' de ' + QUESTIONS.length + '</div>'
+    + '<div class="qtext"></div>';
+  qEl.querySelector('.qtext').textContent = item.q;
+
+  const optWrap = document.createElement('div');
+  item.options.forEach((opt, oi) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.type = 'button';
+    const letter = document.createElement('span');
+    letter.className = 'letter';
+    letter.textContent = LETTERS[oi];
+    const txt = document.createElement('span');
+    txt.className = 'txt';
+    txt.textContent = opt;
+    b.append(letter, txt);
+    b.addEventListener('click', () => handleAnswer(qEl, optWrap, item, oi, b));
+    optWrap.appendChild(b);
+  });
+  qEl.appendChild(optWrap);
+
+  const exp = document.createElement('div');
+  exp.className = 'explain';
+  qEl.appendChild(exp);
+  container.appendChild(qEl);
+});
+
+function handleAnswer(qEl, optWrap, item, chosen, btn) {
+  const buttons = optWrap.querySelectorAll('.opt');
+  buttons.forEach(b => b.disabled = true);
+
+  const isRight = chosen === item.correct;
+  answered++;
+  if (isRight) hits++;
+
+  const right = buttons[item.correct];
+  right.classList.add('correct');
+  right.insertAdjacentHTML('beforeend', '<span class="mark">✓</span>');
+  if (!isRight) {
+    btn.classList.add('wrong');
+    btn.insertAdjacentHTML('beforeend', '<span class="mark">✕</span>');
+  }
+
+  const exp = qEl.querySelector('.explain');
+  exp.classList.add('show', isRight ? 'ok' : 'no');
+  exp.innerHTML = '<b>' + (isRight ? 'Você acertou. ' : 'Não foi dessa vez. ') + '</b>';
+  exp.appendChild(document.createTextNode(item.explain));
+
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('hits').textContent = hits;
+  barEl.style.width = (answered / QUESTIONS.length * 100) + '%';
+
+  if (answered === QUESTIONS.length) showFinal();
+}
+
+function showFinal() {
+  const f = document.getElementById('final');
+  document.getElementById('final-score').textContent = hits;
+  const pct = hits / QUESTIONS.length;
+  let msg;
+  if (pct === 1) msg = "Gabaritou. Pode ir para a prova tranquilo.";
+  else if (pct >= 0.8) msg = "Muito bom — revise só os pontos que escaparam.";
+  else if (pct >= 0.6) msg = "No caminho. Volte ao resumo dos temas que você errou.";
+  else msg = "Vale reler o caderno com calma e refazer o quiz.";
+  document.getElementById('final-msg').textContent = msg;
+  f.classList.add('show');
+  f.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+document.getElementById('retry').addEventListener('click', () => location.reload());
+</script>
+</body>
+</html>
